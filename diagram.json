@@ -25,8 +25,8 @@
     [ "pico:GP13", "led_vermelho:A", "red", [ "v0" ] ],
     [ "pico:GND.1", "led_vermelho:C", "black", [ "v0" ] ],
 
-    [ "pico:GP16", "btn1:1.a", "blue", [ "v0" ] ],
-    [ "pico:GND.2", "btn1:2.a", "black", [ "v0" ] ]
+    [ "pico:GP16", "btn1:1.l", "blue", [ "v0" ] ],
+    [ "pico:GND.2", "btn1:2.l", "black", [ "v0" ] ]
   ],
   "dependencies": {}
 }
