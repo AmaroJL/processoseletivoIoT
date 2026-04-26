@@ -2,6 +2,13 @@ import machine
 import dht
 import time
 
+try:
+    with open('src/main.py', 'r') as f:
+        codigo = f.read()
+        exec(codigo)
+except Exception as e:
+    print(f"Erro ao carregar o firmware principal: {e}")
+
 sensor_dht = dht.DHT22(machine.Pin(15))
 sensor_presenca = machine.ADC(machine.Pin(34))
 sensor_presenca.atten(machine.ADC.ATTN_11DB) 
