@@ -3,30 +3,30 @@
   "author": "Amaro Jr.",
   "editor": "wokwi",
   "parts": [
-    { "type": "wokwi-pi-pico", "id": "pico", "top": 0, "left": 0, "attrs": {} },
-    { "type": "wokwi-dht22", "id": "dht1", "top": -150, "left": 100, "attrs": {} },
-    { "type": "wokwi-potentiometer", "id": "pot1", "top": 150, "left": 100, "attrs": {} },
+    { "type": "board-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -150, "left": 150, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": 150, "left": 150, "attrs": {} },
     { "type": "wokwi-led", "id": "led_verde", "top": -100, "left": -150, "attrs": { "color": "green" } },
     { "type": "wokwi-led", "id": "led_vermelho", "top": -60, "left": -150, "attrs": { "color": "red" } },
     { "type": "wokwi-pushbutton", "id": "btn1", "top": 100, "left": -150, "attrs": { "color": "blue" } }
   ],
   "connections": [
-    [ "pico:GP15", "dht1:SDA", "green", [ "v0" ] ],
-    [ "pico:3V3", "dht1:VCC", "red", [ "v0" ] ],
-    [ "pico:GND.4", "dht1:GND", "black", [ "v0" ] ],
+    [ "esp:15", "dht1:SDA", "green", [ "v0" ] ],
+    [ "esp:3V3", "dht1:VCC", "red", [ "v0" ] ],
+    [ "esp:GND.1", "dht1:GND", "black", [ "v0" ] ],
 
-    [ "pico:GP26", "pot1:SIG", "blue", [ "v0" ] ],
-    [ "pico:3V3", "pot1:VCC", "red", [ "v0" ] ],
-    [ "pico:GND.4", "pot1:GND", "black", [ "v0" ] ],
+    [ "esp:34", "pot1:SIG", "blue", [ "v0" ] ],
+    [ "esp:3V3", "pot1:VCC", "red", [ "v0" ] ],
+    [ "esp:GND.1", "pot1:GND", "black", [ "v0" ] ],
 
-    [ "pico:GP14", "led_verde:A", "green", [ "v0" ] ],
-    [ "pico:GND.1", "led_verde:C", "black", [ "v0" ] ],
+    [ "esp:21", "led_verde:A", "green", [ "v0" ] ],
+    [ "esp:GND.2", "led_verde:C", "black", [ "v0" ] ],
 
-    [ "pico:GP13", "led_vermelho:A", "red", [ "v0" ] ],
-    [ "pico:GND.1", "led_vermelho:C", "black", [ "v0" ] ],
+    [ "esp:19", "led_vermelho:A", "red", [ "v0" ] ],
+    [ "esp:GND.2", "led_vermelho:C", "black", [ "v0" ] ],
 
-    [ "pico:GP16", "btn1:1.l", "blue", [ "v0" ] ],
-    [ "pico:GND.2", "btn1:2.l", "black", [ "v0" ] ]
+    [ "esp:18", "btn1:1.l", "blue", [ "v0" ] ],
+    [ "esp:GND.3", "btn1:2.l", "black", [ "v0" ] ]
   ],
   "dependencies": {}
 }

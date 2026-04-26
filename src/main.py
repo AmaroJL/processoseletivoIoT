@@ -3,10 +3,11 @@ import dht
 import time
 
 sensor_dht = dht.DHT22(machine.Pin(15))
-sensor_presenca = machine.ADC(26)
-led_seguro = machine.Pin(14, machine.Pin.OUT)
-led_alarme = machine.Pin(13, machine.Pin.OUT)
-botao = machine.Pin(16, machine.Pin.IN, machine.Pin.PULL_UP)
+sensor_presenca = machine.ADC(machine.Pin(34))
+sensor_presenca.atten(machine.ADC.ATTN_11DB) 
+led_seguro = machine.Pin(21, machine.Pin.OUT)
+led_alarme = machine.Pin(19, machine.Pin.OUT)
+botao = machine.Pin(18, machine.Pin.IN, machine.Pin.PULL_UP)
 
 LIMITE_PRESENCA = 40000  
 LIMITE_TEMP_FOGO = 50.0  
@@ -19,7 +20,6 @@ ultimo_clique_botao = 0
 def alternar_sistema(pino):
     global sistema_armado, ultimo_clique_botao
     agora = time.ticks_ms()
-    
     if time.ticks_diff(agora, ultimo_clique_botao) > 300:
         sistema_armado = not sistema_armado
         print(f"Sistema {'ARMADO' if sistema_armado else 'DESARMADO'}")
@@ -29,9 +29,9 @@ botao.irq(trigger=machine.Pin.IRQ_FALLING, handler=alternar_sistema)
 
 def main():
     global ultimo_tempo_dht, ultima_leitura_temp
-    print("Sistema de Segurança Iniciado...")
+    print("Sistema de Segurança Iniciado (ESP32)...")
 
-    print("Teste")
+    print("Teste") 
     
     while True:
         if sistema_armado:
@@ -43,15 +43,14 @@ def main():
                     ultima_leitura_temp = sensor_dht.temperature()
                     ultimo_tempo_dht = agora
                 except OSError:
-                    print("Falha de leitura no DHT22. Tentando novamente...")
+                    pass
             
             presenca = sensor_presenca.read_u16()
             
             if ultima_leitura_temp is not None:
                 if presenca > LIMITE_PRESENCA or ultima_leitura_temp > LIMITE_TEMP_FOGO:
-                    print(f"ALERTA! Temp: {ultima_leitura_temp}°C | Presença: {presenca}")
                     led_seguro.off()
-                    led_alarme.value(not led_alarme.value())
+                    led_alarme.value(not led_alarme.value()) 
                     time.sleep(0.1) 
                 else:
                     led_seguro.on()

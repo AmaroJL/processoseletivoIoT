@@ -261,7 +261,7 @@ A arquitetura do firmware foi desenvolvida em MicroPython e estruturada em torno
 
 Os seguintes componentes foram integrados no `diagram.json`:
 
-* **Raspberry Pi Pico:** Microcontrolador principal do sistema.
+* **ESP32:** Microcontrolador principal do sistema.
 * **Wokwi-DHT22 (Pino GP15):** Atua como sensor de incêndio, monitorando se a temperatura ambiente ultrapassa o limite seguro de 50°C.
 * **Wokwi-Potentiometer (Pino GP26 / ADC0):** Simula um sensor de presença/distância granular (0 a 65535). Valores altos indicam invasão.
 * **LED Verde (Pino GP14):** Indicador visual de que o sistema está Armado e o ambiente está seguro.
