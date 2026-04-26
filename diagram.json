@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "author": "Amaro Jr.",
+  "author": "Candidato",
   "editor": "wokwi",
   "parts": [
     { "type": "board-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
@@ -11,22 +11,22 @@
     { "type": "wokwi-pushbutton", "id": "btn1", "top": 100, "left": -150, "attrs": { "color": "blue" } }
   ],
   "connections": [
-    [ "esp:15", "dht1:SDA", "green", [ "v0" ] ],
+    [ "esp:D15", "dht1:SDA", "green", [ "v0" ] ],
     [ "esp:3V3", "dht1:VCC", "red", [ "v0" ] ],
     [ "esp:GND.1", "dht1:GND", "black", [ "v0" ] ],
 
-    [ "esp:34", "pot1:SIG", "blue", [ "v0" ] ],
+    [ "esp:D34", "pot1:SIG", "blue", [ "v0" ] ],
     [ "esp:3V3", "pot1:VCC", "red", [ "v0" ] ],
     [ "esp:GND.1", "pot1:GND", "black", [ "v0" ] ],
 
-    [ "esp:21", "led_verde:A", "green", [ "v0" ] ],
+    [ "esp:D21", "led_verde:A", "green", [ "v0" ] ],
     [ "esp:GND.2", "led_verde:C", "black", [ "v0" ] ],
 
-    [ "esp:19", "led_vermelho:A", "red", [ "v0" ] ],
+    [ "esp:D19", "led_vermelho:A", "red", [ "v0" ] ],
     [ "esp:GND.2", "led_vermelho:C", "black", [ "v0" ] ],
 
-    [ "esp:18", "btn1:1.l", "blue", [ "v0" ] ],
-    [ "esp:GND.3", "btn1:2.l", "black", [ "v0" ] ]
+    [ "esp:D18", "btn1:1.l", "blue", [ "v0" ] ],
+    [ "esp:GND.2", "btn1:2.l", "black", [ "v0" ] ]
   ],
   "dependencies": {}
 }
