@@ -231,84 +231,66 @@ Após concluir o desenvolvimento:
 
 ## 📝 Relatório do Candidato
 
-O arquivo **`README.md` do seu repositório** deve ser utilizado como o  
-**relatório final do desafio técnico**.
-
-Preencha todas as seções abaixo de forma **clara, objetiva e técnica**.
-
-> 💡 **Dica importante**  
-> Não é necessário um relatório extenso.  
-> O principal critério é demonstrar **clareza nas decisões técnicas**, organização e entendimento do sistema embarcado desenvolvido.
-
 ---
 
 ### 👤 Identificação do Candidato
 
-- **Nome completo:**  
-- **GitHub:**  
+- **Amaro Júnior Silva Luna**  
+- **[GitHub:](https://github.com/AmaroJL)**  
 
 ---
 
 ## 1️⃣ Visão Geral da Solução
 
-Descreva, em poucas palavras:
-
-- Qual é o objetivo do seu projeto  
-- O que o sistema embarcado simulado faz  
-- Como o usuário interage com ele (se aplicável)
+O projeto consiste em um **Monitor de Segurança Residencial (Smart Alarm)** simulado. 
+O objetivo do sistema é detectar possíveis invasões (usando um potenciômetro para simular proximidade/presença) e princípios de incêndio (monitorando picos de temperatura). O usuário interage com o sistema através de um botão físico para armar ou desarmar o alarme, recebendo feedback visual imediato através de LEDs de sinalização de status.
 
 ---
 
 ## 2️⃣ Arquitetura do Sistema Embarcado
 
-Explique a arquitetura lógica do seu projeto, abordando:
+A arquitetura do firmware foi desenvolvida em MicroPython e estruturada em torno de uma **Máquina de Estados Simples** (Armado / Desarmado) e arquitetura não-bloqueante:
 
-- Fluxo principal do programa (`main.py`)  
-- Estrutura de estados, loops ou temporizações  
-- Como os componentes interagem entre si  
-
-Se desejar, utilize tópicos ou um pequeno diagrama em texto.
+* **Fluxo Principal (`main.py`):** O loop `while True` verifica continuamente o estado da variável global `sistema_armado`. Se ativo, ele avalia as leituras dos sensores e atualiza os atuadores (LEDs).
+* **Gestão de Tempo Não-Bloqueante:** Em vez de usar `time.sleep()` extensivamente, o sistema utiliza `time.ticks_ms()` para criar temporizadores assíncronos. Isso permite ler o potenciômetro rapidamente, enquanto o sensor de temperatura é lido em intervalos maiores.
+* **Interrupções (IRQ):** A mudança de estado do sistema (Armar/Desarmar) não ocorre no loop principal, mas sim através de uma interrupção de hardware disparada pelo botão, garantindo resposta imediata ao usuário independente do processamento atual.
 
 ---
 
 ## 3️⃣ Componentes Utilizados na Simulação
 
-Liste os principais componentes definidos no `diagram.json`, por exemplo:
+Os seguintes componentes foram integrados no `diagram.json`:
 
-- Tipo de placa utilizada  
-- LEDs, botões, sensores, atuadores, etc.  
-- Função de cada componente no sistema  
+* **Raspberry Pi Pico:** Microcontrolador principal do sistema.
+* **Wokwi-DHT22 (Pino GP15):** Atua como sensor de incêndio, monitorando se a temperatura ambiente ultrapassa o limite seguro de 50°C.
+* **Wokwi-Potentiometer (Pino GP26 / ADC0):** Simula um sensor de presença/distância granular (0 a 65535). Valores altos indicam invasão.
+* **LED Verde (Pino GP14):** Indicador visual de que o sistema está Armado e o ambiente está seguro.
+* **LED Vermelho (Pino GP13):** Indicador visual de Alerta/Invasão. Pisca intermitentemente quando um gatilho é acionado.
+* **Wokwi-Pushbutton (Pino GP16):** Botão de controle do usuário para alternar o estado de segurança.
 
 ---
 
 ## 4️⃣ Decisões Técnicas Relevantes
 
-Explique brevemente decisões importantes tomadas durante o desenvolvimento, como:
-
-- Organização do código  
-- Uso de funções, estados ou constantes  
-- Estratégias para temporização ou controle lógico  
+* **Uso de Interrupções de Hardware (IRQ):** O botão foi configurado com `machine.Pin.IRQ_FALLING` para garantir que o clique seja detectado imediatamente. 
+* **Debounce por Software:** Implementei uma lógica de debounce de 300ms baseada em `ticks_ms()` dentro da função de interrupção para evitar múltiplas leituras mecânicas do botão sem travar a execução principal.
+* **Respeito ao Limite de Hardware do DHT22:** Como sensores reais DHT22 exigem um intervalo de ~2 segundos entre leituras, utilizei um temporizador para garantir que o método `sensor_dht.measure()` só seja chamado nesse intervalo mínimo, evitando exceções do tipo `OSError` e garantindo estabilidade.
+* **Resistor Pull-up Interno:** O botão foi instanciado com `machine.Pin.PULL_UP`, reduzindo a necessidade de componentes externos no circuito virtual.
 
 ---
 
 ## 5️⃣ Resultados Obtidos
 
-Descreva o comportamento final do sistema:
-
-- O que funciona corretamente  
-- Quais requisitos foram atendidos  
-- Resultado observado na simulação do Wokwi  
-
+O sistema funciona conforme o esperado, atendendo a todos os requisitos do desafio:
+* O projeto compila e a simulação é executada com sucesso e sem travamentos.
+* Quando o potenciômetro simula proximidade excessiva (>40.000) ou o DHT22 simula alta temperatura (>50°C), o sistema transita perfeitamente para o estado de alerta, desativando o LED Verde e piscando o LED Vermelho.
+* O botão arma e desarma o sistema sem falhas, graças ao tratamento de debounce.
+* A simulação é aprovada com sucesso na validação automática via **GitHub Actions**, utilizando a configuração padrão fornecida (`flasher_args.json`).
 ---
 
 ## 6️⃣ Comentários Adicionais (Opcional)
 
-Utilize este espaço para comentar, se desejar:
-
-- Dificuldades encontradas  
-- Limitações da solução  
-- Melhorias que você faria com mais tempo  
-- Principais aprendizados durante o desafio  
+Durante o desenvolvimento, um dos maiores aprendizados foi conciliar a lógica contínua de um loop `while` com os limites físicos de tempo de resposta dos sensores (especialmente o limite de 2 segundos do DHT22) e os requisitos de performance do GitHub Actions. O uso de interrupções e temporizadores não-bloqueantes provou ser uma solução robusta e muito próxima do cenário real da engenharia de sistemas embarcados.
 
 ---
 
