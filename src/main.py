@@ -3,6 +3,8 @@ import dht
 import time
 import sys
 
+print("Teste")
+
 print("========================================")
 print(" Sistema de Segurança Iniciado ")
 print("========================================")
