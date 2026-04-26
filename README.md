@@ -236,7 +236,7 @@ Após concluir o desenvolvimento:
 ### 👤 Identificação do Candidato
 
 - **Amaro Júnior Silva Luna**  
-- **[GitHub:](https://github.com/AmaroJL)**  
+- **[GitHub](https://github.com/AmaroJL)**  
 
 ---
 
@@ -253,44 +253,46 @@ A arquitetura do firmware foi desenvolvida em MicroPython e estruturada em torno
 
 * **Fluxo Principal (`main.py`):** O loop `while True` verifica continuamente o estado da variável global `sistema_armado`. Se ativo, ele avalia as leituras dos sensores e atualiza os atuadores (LEDs).
 * **Gestão de Tempo Não-Bloqueante:** Em vez de usar `time.sleep()` extensivamente, o sistema utiliza `time.ticks_ms()` para criar temporizadores assíncronos. Isso permite ler o potenciômetro rapidamente, enquanto o sensor de temperatura é lido em intervalos maiores.
-* **Interrupções (IRQ):** A mudança de estado do sistema (Armar/Desarmar) não ocorre no loop principal, mas sim através de uma interrupção de hardware disparada pelo botão, garantindo resposta imediata ao usuário independente do processamento atual.
+* **Leitura de Botão por Polling de Estado:** A mudança de estado (Armar/Desarmar) ocorre através da leitura contínua (*polling*) que compara o estado atual do botão com o estado anterior, garantindo uma transição limpa e evitando os travamentos comuns de Interrupções (IRQs) em simuladores web.
 
 ---
 
 ## 3️⃣ Componentes Utilizados na Simulação
 
-Os seguintes componentes foram integrados no `diagram.json`:
+A arquitetura de hardware foi migrada para o **ESP32 (Placa Devkit-C V4)** para garantir total estabilidade com a esteira de CI/CD. Os componentes foram integrados no `diagram.json` da seguinte forma:
 
 * **ESP32:** Microcontrolador principal do sistema.
-* **Wokwi-DHT22 (Pino GP15):** Atua como sensor de incêndio, monitorando se a temperatura ambiente ultrapassa o limite seguro de 50°C.
-* **Wokwi-Potentiometer (Pino GP26 / ADC0):** Simula um sensor de presença/distância granular (0 a 65535). Valores altos indicam invasão.
-* **LED Verde (Pino GP14):** Indicador visual de que o sistema está Armado e o ambiente está seguro.
-* **LED Vermelho (Pino GP13):** Indicador visual de Alerta/Invasão. Pisca intermitentemente quando um gatilho é acionado.
-* **Wokwi-Pushbutton (Pino GP16):** Botão de controle do usuário para alternar o estado de segurança.
+* **Wokwi-DHT22 (Pino 13):** Atua como sensor de incêndio, monitorando se a temperatura ambiente ultrapassa o limite seguro de 50°C.
+* **Wokwi-Potentiometer (Pino 34 / ADC):** Simula um sensor de presença/distância granular (0 a 65535). Valores altos indicam invasão.
+* **LED Verde (Pino 26):** Indicador visual de que o sistema está Armado e o ambiente está seguro.
+* **LED Vermelho (Pino 27):** Indicador visual de Alerta/Invasão. Pisca intermitentemente quando um gatilho é acionado.
+* **Wokwi-Pushbutton (Pino 14):** Botão de controle do usuário para alternar o estado de segurança.
 
 ---
 
 ## 4️⃣ Decisões Técnicas Relevantes
 
-* **Uso de Interrupções de Hardware (IRQ):** O botão foi configurado com `machine.Pin.IRQ_FALLING` para garantir que o clique seja detectado imediatamente. 
-* **Debounce por Software:** Implementei uma lógica de debounce de 300ms baseada em `ticks_ms()` dentro da função de interrupção para evitar múltiplas leituras mecânicas do botão sem travar a execução principal.
-* **Respeito ao Limite de Hardware do DHT22:** Como sensores reais DHT22 exigem um intervalo de ~2 segundos entre leituras, utilizei um temporizador para garantir que o método `sensor_dht.measure()` só seja chamado nesse intervalo mínimo, evitando exceções do tipo `OSError` e garantindo estabilidade.
-* **Resistor Pull-up Interno:** O botão foi instanciado com `machine.Pin.PULL_UP`, reduzindo a necessidade de componentes externos no circuito virtual.
+* **Fuga dos Strapping Pins:** Todos os pinos de hardware foram escolhidos meticulosamente para evitar os pinos de boot do ESP32 (como o pino 15 e 12). Isso evitou que a placa entrasse em modo de gravação e congelasse a simulação.
+* **Debounce por Software:** Implementei uma lógica de debounce baseada em pequenos atrasos e controle de estado dentro da malha de verificação do botão para evitar "falsos cliques" causados por ruído mecânico.
+* **Respeito ao Limite de Hardware do DHT22:** Como sensores reais DHT22 exigem um intervalo de ~2 segundos entre leituras, utilizei um temporizador baseado em `ticks_ms()` para garantir que o método `sensor_dht.measure()` só seja chamado nesse intervalo mínimo, evitando exceções do tipo `OSError`.
+* **Roteamento de Serial Nativo:** O arquivo `diagram.json` foi customizado com `[ "esp:TX", "$serialMonitor:RX", "", [] ]` e a tag de ambiente do MicroPython `v1.22.0`. Isso garante que a simulação possa ser executada e validada visualmente no Wokwi Web, além de passar no GitHub Actions.
 
 ---
 
 ## 5️⃣ Resultados Obtidos
 
 O sistema funciona conforme o esperado, atendendo a todos os requisitos do desafio:
-* O projeto compila e a simulação é executada com sucesso e sem travamentos.
-* Quando o potenciômetro simula proximidade excessiva (>40.000) ou o DHT22 simula alta temperatura (>50°C), o sistema transita perfeitamente para o estado de alerta, desativando o LED Verde e piscando o LED Vermelho.
-* O botão arma e desarma o sistema sem falhas, graças ao tratamento de debounce.
-* A simulação é aprovada com sucesso na validação automática via **GitHub Actions**, utilizando a configuração padrão fornecida (`flasher_args.json`).
+
+* O projeto compila e a simulação é executada com sucesso e sem travamentos tanto no navegador quanto na Action.
+* Quando o potenciômetro simula proximidade excessiva (>40.000) ou o DHT22 simula alta temperatura (>50°C), o sistema transita perfeitamente para o estado de alerta, desativando o LED Verde e ativando o LED Vermelho.
+* O botão arma e desarma o sistema sem falhas, com o terminal exibindo relatórios de status controlados e limpos.
+* A simulação é aprovada com sucesso na validação automática via **GitHub Actions**, respeitando os arquivos de configuração exigidos (`flasher_args.json`).
+
 ---
 
-## 6️⃣ Comentários Adicionais (Opcional)
+## 6️⃣ Comentários Adicionais
 
-Durante o desenvolvimento, um dos maiores aprendizados foi conciliar a lógica contínua de um loop `while` com os limites físicos de tempo de resposta dos sensores (especialmente o limite de 2 segundos do DHT22) e os requisitos de performance do GitHub Actions. O uso de interrupções e temporizadores não-bloqueantes provou ser uma solução robusta e muito próxima do cenário real da engenharia de sistemas embarcados.
+Durante o desenvolvimento, o maior desafio (e aprendizado) foi investigar o comportamento de *low-level* do hardware no simulador, descobrindo o impacto dos pinos de inicialização (Strapping Pins) na estabilidade do sistema operacional MicroPython. A transição para uma arquitetura com mapeamento de pinos seguro e a compreensão de como o simulador roteia dados seriais para CI/CD foram fundamentais para entregar uma solução robusta.
 
 ---
 
