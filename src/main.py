@@ -30,6 +30,8 @@ botao.irq(trigger=machine.Pin.IRQ_FALLING, handler=alternar_sistema)
 def main():
     global ultimo_tempo_dht, ultima_leitura_temp
     print("Sistema de Segurança Iniciado...")
+
+    print("Teste")
     
     while True:
         if sistema_armado:
