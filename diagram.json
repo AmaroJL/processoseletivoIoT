@@ -12,30 +12,49 @@
     },
     { "type": "wokwi-dht22", "id": "dht1", "top": -150, "left": 150, "attrs": {} },
     { "type": "wokwi-potentiometer", "id": "pot1", "top": 150, "left": 150, "attrs": {} },
-    { "type": "wokwi-led", "id": "led_verde", "top": -100, "left": -150, "attrs": { "color": "green" } },
-    { "type": "wokwi-led", "id": "led_vermelho", "top": -60, "left": -150, "attrs": { "color": "red" } },
-    { "type": "wokwi-pushbutton", "id": "btn1", "top": 100, "left": -150, "attrs": { "color": "blue" } }
+    {
+      "type": "wokwi-led",
+      "id": "led_verde",
+      "top": -100,
+      "left": -150,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_vermelho",
+      "top": -60,
+      "left": -150,
+      "attrs": { "color": "red" }
+    },
+    { "type": "wokwi-membrane-keypad", "id": "keypad1", "top": 94, "left": -340, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "porta1", "top": 50, "left": 250, "attrs": {} },
+    { "type": "wokwi-buzzer", "id": "sirene", "top": -30, "left": -260, "attrs": {} }
   ],
   "connections": [
     [ "esp:TX", "$serialMonitor:RX", "", [] ],
     [ "esp:RX", "$serialMonitor:TX", "", [] ],
-
     [ "esp:13", "dht1:SDA", "green", [ "v0" ] ],
     [ "esp:3V3", "dht1:VCC", "red", [ "v0" ] ],
     [ "esp:GND.1", "dht1:GND", "black", [ "v0" ] ],
-
     [ "esp:34", "pot1:SIG", "blue", [ "v0" ] ],
     [ "esp:3V3", "pot1:VCC", "red", [ "v0" ] ],
     [ "esp:GND.1", "pot1:GND", "black", [ "v0" ] ],
-
     [ "esp:26", "led_verde:A", "green", [ "v0" ] ],
     [ "esp:GND.2", "led_verde:C", "black", [ "v0" ] ],
-
     [ "esp:27", "led_vermelho:A", "red", [ "v0" ] ],
     [ "esp:GND.2", "led_vermelho:C", "black", [ "v0" ] ],
-
-    [ "esp:14", "btn1:1.l", "blue", [ "v0" ] ],
-    [ "esp:GND.2", "btn1:2.l", "black", [ "v0" ] ]
+    [ "esp:19", "keypad1:R1", "purple", [ "v0" ] ],
+    [ "esp:18", "keypad1:R2", "purple", [ "v0" ] ],
+    [ "esp:5", "keypad1:R3", "purple", [ "v0" ] ],
+    [ "esp:17", "keypad1:R4", "purple", [ "v0" ] ],
+    [ "esp:16", "keypad1:C1", "orange", [ "v0" ] ],
+    [ "esp:4", "keypad1:C2", "orange", [ "v0" ] ],
+    [ "esp:2", "keypad1:C3", "orange", [ "v0" ] ],
+    [ "esp:15", "keypad1:C4", "orange", [ "v0" ] ],
+    [ "esp:32", "porta1:2", "blue", [ "v0" ] ],
+    [ "esp:GND.1", "porta1:1", "black", [ "v0" ] ],
+    [ "esp:25", "sirene:1", "purple", [ "v0" ] ],
+    [ "esp:GND.2", "sirene:2", "black", [ "v0" ] ]
   ],
   "dependencies": {}
 }
