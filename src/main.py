@@ -3,12 +3,13 @@ import dht
 import time
 import network
 import urequests
-
-print("========================================")
-print(" Sistema de Segurança com IoT (Telegram)")
-print("========================================")
+from config import TELEGRAM_TOKEN, CHAT_ID
 
 print("Teste")
+
+print("=========================================")
+print(" Sistema de Segurança com IoT (Telegram) ")
+print("=========================================")
 
 print("Conectando ao Wi-Fi...", end="")
 wifi = network.WLAN(network.STA_IF)
@@ -23,7 +24,7 @@ print("\nWi-Fi Conectado! IP:", wifi.ifconfig()[0])
 def enviar_telegram(mensagem):
     print("Enviando alerta para o celular...")
     msg_url = mensagem.replace(" ", "%20")
-    url = f"https://api.telegram.org/bot8333364619:AAHtEApRQ3ZVWhvbyp-4mqchGNTdmfcoL_s/sendMessage?chat_id=7765269961&text={msg_url}"
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={msg_url}"
     try:
         resposta = urequests.get(url)
         resposta.close()

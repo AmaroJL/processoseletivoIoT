@@ -57,3 +57,35 @@ O sistema funciona conforme o esperado, transformando-se em um alarme IoT comple
 
 ## 6️⃣ Comentários Adicionais
 Durante o desenvolvimento, o maior desafio foi integrar diferentes tecnologias (PWM, leitura analógica, temporização assíncrona, varredura de matriz e requisições HTTP) dentro de um único loop `while True` sem causar gargalos (bloqueios) no processamento. 
+
+---
+
+##  Configuração do Telegram e Credenciais
+
+Para garantir que os alertas do sistema sejam enviados para o seu próprio Telegram, é necessário configurar o seu próprio bot. Siga os passos abaixo:
+
+### 1. Criando um Bot no Telegram
+
+1. Abra o Telegram e busque pelo contato oficial **@BotFather**.
+2. Inicie a conversa e envie o comando `/newbot`.
+3. Escolha um **Nome** e um **Username** para o seu bot.
+4. Copie o **Token HTTP API** gerado (ele será semelhante a `123456789:XXXXXXXXXXXXXXXXXXXXXXXXX`).
+
+---
+
+### 2. Descobrindo o seu Chat ID
+
+1. No Telegram, busque pelo bot **@userinfobot** ou **@raw_data_bot**.
+2. Inicie a conversa e envie o comando `/start`.
+3. O bot responderá com os dados da sua conta. Copie o número correspondente ao **ID** (ex: `123456789`).
+
+---
+
+### 3. Configurando o Arquivo Local
+
+1. Crie um arquivo chamado `config.py` na mesma pasta do projeto (junto com o `main.py`).
+2. Adicione suas credenciais preenchendo com os dados que você copiou nos passos anteriores:
+
+```python
+TELEGRAM_TOKEN = "COLE_O_SEU_TOKEN_AQUI"
+CHAT_ID = "COLE_O_SEU_CHAT_ID_AQUI"
