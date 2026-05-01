@@ -3,7 +3,7 @@ import dht
 import time
 import network
 import urequests
-from config import TELEGRAM_TOKEN, CHAT_ID
+#from config import TELEGRAM_TOKEN, CHAT_ID
 
 print("Teste")
 

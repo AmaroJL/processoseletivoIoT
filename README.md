@@ -81,11 +81,16 @@ Para garantir que os alertas do sistema sejam enviados para o seu próprio Teleg
 
 ---
 
-### 3. Configurando o Arquivo Local
+### 3. Configurando o Arquivo Local 
+   ### 3.0 Caso a execução do projeto seja local
+    1. Crie um arquivo chamado `config.py` na mesma pasta do projeto.
+    2. Adicione suas credenciais preenchendo com os dados que você copiou nos passos anteriores:
 
-1. Crie um arquivo chamado `config.py` na mesma pasta do projeto (junto com o `main.py`).
-2. Adicione suas credenciais preenchendo com os dados que você copiou nos passos anteriores:
-
-```python
-TELEGRAM_TOKEN = "COLE_O_SEU_TOKEN_AQUI"
-CHAT_ID = "COLE_O_SEU_CHAT_ID_AQUI"
+    ```python
+    TELEGRAM_TOKEN = "COLE_O_SEU_TOKEN_AQUI"
+    CHAT_ID = "COLE_O_SEU_CHAT_ID_AQUI"
+    ```
+   ### 3.1 Caso contrário (execução no **[Wokwi web](https://wokwi.com/projects/322577683855704658)**)
+    1. Acesse o projeto via web no link disponibilizado acima, `Wokwi web`.
+    2. Èncontre a linha 27, `url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={msg_url}"`.
+    3. Substitua `{TELEGRAM_TOKEN}` pelo seu Token e `{CHAT_ID}` pelo seu Id.
